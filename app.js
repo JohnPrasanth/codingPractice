@@ -1,27 +1,27 @@
-let express = require("express");
-let sqlite = require("sqlite3");
-let { open } = require("sqlite");
-let path = require("path");
+const express = require("express");
+const sqlite3 = require("sqlite3");
+const { open } = require("sqlite");
+const path = require("path");
 
-let app = express();
+const app = express();
 app.use(express.json());
 let db = null;
 const dbPath = path.join(__dirname, "cricketTeam.db");
-const initiateBDAndStart = async () => {
+const initiateBDAndServer = async () => {
   try {
     db = await open({
       filename: dbPath,
-      driver: sqlite.Database,
+      driver: sqlite3.Database,
     });
     app.listen(3000, () => {
-      console.log("Server running in 3000 port");
+      console.log("Server Running at http://localhost:3000/");
     });
   } catch (e) {
-    console.log(`${e}`);
+    console.log(`DB Error: ${e.message}`);
     process.exit(1);
   }
 };
-initiateBDAndStart();
+initiateBDAndServer();
 const convertDbObjectToResponseObject = (dbObject) => {
   return {
     playerId: dbObject.player_id,
@@ -100,5 +100,4 @@ app.delete("/players/:playerId/", async (request, response) => {
   let deletePlayer = await db.run(delPlayerSql);
   response.send("Player Removed");
 });
-
 module.exports = app;
