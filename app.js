@@ -34,7 +34,7 @@ const convertDbObjectToResponseObject = (dbObject) => {
 app.get("/player/", async (request, response) => {
   const allPlayersSql = `
     SELECT *
-    FROM cricket_team
+    FROM cricket_team;
     `;
   const allPlayers = await db.all(allPlayersSql);
   response.send(
@@ -43,14 +43,16 @@ app.get("/player/", async (request, response) => {
 });
 //2
 app.post("/player/", async (request, response) => {
+  console.log(request.body);
   let { playerName, jerseyNumber, role } = request.body;
   const postPlayerSql = `
-  INSERT INTO 
+  INSERT INTO
   cricket_team(player_name, jersey_number, role)
   values(
       '${playerName}',
       ${jerseyNumber},
-      '${role}')
+      '${role}'
+      );
   `;
   let postPlayer = await db.run(postPlayerSql);
   response.send("Player Added to Team");
@@ -72,12 +74,13 @@ app.put("/players/:playerId/", async (request, response) => {
   let { playerName, jerseyNumber, role } = request.body;
   console.log(request.body);
   let putPlayerSql = `
-  UPDATE cricket_team
+  UPDATE 
+    cricket_team
   SET
     player_name = '${playerName}',
     jersey_number = ${jerseyNumber},
     role = '${role}'
-  WHERE  player_id=${playerId}
+  WHERE  player_id=${playerId};
   `;
   const putPlayer = await db.run(putPlayerSql);
   response.send("Player Details Updated");
@@ -87,7 +90,7 @@ app.delete("/players/:playerId/", async (request, response) => {
   let { playerId } = request.params;
   let delPlayerSql = `DELETE 
     FROM cricket_team
-    WHERE player_id=${playerId}
+    WHERE player_id=${playerId};
     `;
   let deletePlayer = await db.run(delPlayerSql);
   response.send("Player Removed");
