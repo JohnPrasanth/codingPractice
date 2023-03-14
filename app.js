@@ -62,8 +62,10 @@ app.get("/player/:playerId/", async (request, response) => {
   let { playerId } = request.params;
   const getPlayerSql = `
     SELECT *
-    FROM cricket_team
-    WHERE player_id  = ${playerId};
+    FROM
+      cricket_team
+    WHERE
+      player_id  = ${playerId};
     `;
   let getPlayer = await db.get(getPlayerSql);
   response.send(getPlayer);
@@ -80,7 +82,8 @@ app.put("/players/:playerId/", async (request, response) => {
     player_name = '${playerName}',
     jersey_number = ${jerseyNumber},
     role = '${role}'
-  WHERE  player_id=${playerId};
+  WHERE
+    player_id=${playerId};
   `;
   const putPlayer = await db.run(putPlayerSql);
   response.send("Player Details Updated");
@@ -88,9 +91,11 @@ app.put("/players/:playerId/", async (request, response) => {
 //5
 app.delete("/players/:playerId/", async (request, response) => {
   let { playerId } = request.params;
-  let delPlayerSql = `DELETE 
-    FROM cricket_team
-    WHERE player_id=${playerId};
+  let delPlayerSql = `
+  DELETE FROM 
+    cricket_team
+  WHERE 
+    player_id=${playerId};
     `;
   let deletePlayer = await db.run(delPlayerSql);
   response.send("Player Removed");
